@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    NinjaBuggs\ServiceBus\Query\QueryBusInterface: '@ninja_bugs.service_bus.query.bus'
+    NinjaBuggs\ServiceBus\Command\CommandBusInterface: '@ninja_bugs.service_bus.command.bus'
+    NinjaBuggs\ServiceBus\Event\EventBusInterface: '@ninja_bugs.service_bus.event.bus'

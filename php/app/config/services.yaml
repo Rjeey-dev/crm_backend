@@ -1,0 +1,55 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    env(MONGODB_URL): ''
+    env(MONGODB_DB): ''
+
+imports:
+    - { resource: '../src/Tasks/Presentation/Resources/config/services.yml' }
+    - { resource: '../src/Comments/Presentation/Resources/config/services.yml' }
+
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: true
+        bind:
+            string $secret: '%env(MERCURE_JWT_SECRET)%'
+            string $webSocketUrl: '%env(WEB_SOCKET_URL)%'
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude:
+            - '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+            - '../src/Comments/Application/Query'
+            - '../src/Comments/Application/Command'
+            - '../src/Comments/Domain/ValueObject'
+            - '../src/Comments/Domain/DTO'
+            - '../src/Comments/Domain/Event'
+            - '../src/Comments/Domain/Entity'
+            - '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+            - '../src/Tasks/Application/Query'
+            - '../src/Tasks/Application/Command'
+            - '../src/Tasks/Domain/ValueObject'
+            - '../src/Tasks/Domain/DTO'
+            - '../src/Tasks/Domain/Event'
+            - '../src/Tasks/Domain/Entity'
+            - '../src/Users/Application/Query'
+            - '../src/Users/Application/Command'
+            - '../src/Users/Domain/DTO'
+            - '../src/Users/Domain/Event'
+            - '../src/Users/Domain/Entity'
+            - '../src/Users/Domain/ValueObject'
+            - '../src/Users/Infrastructure/Services/Auth/DTO'
+            - '../src/Users/Infrastructure/Services/Identity'
+
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones

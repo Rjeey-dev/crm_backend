@@ -1,0 +1,4 @@
+.idea/
+mongodb/data
+nginx/logs
+php/logs

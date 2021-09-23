@@ -1,0 +1,51 @@
+server {
+    listen 80;
+
+    server_name ${APP_HOST};
+    root /var/www/app/public;
+
+    add_header X-Frame-Options DENY;
+
+    set $request_url $request_uri;
+
+    if ($request_uri ~ " ") {
+        return 80;
+    }
+
+    access_log /var/log/nginx/app_access.log;
+    error_log  /var/log/nginx/app_error.log;
+
+    client_max_body_size 0M;
+    client_body_buffer_size    128k;
+
+    # MAIN LOCATION
+
+    location / {
+        # try to serve file directly, fallback to app.php
+        try_files $uri $uri/index.html @rewriteapp;
+    }
+
+    location @rewriteapp {
+        # rewrite all to app.php
+        rewrite ^(.*)$ /index.php/$1 last;
+    }
+
+    set $cors_origin https://localhost;
+
+    location ~ \.php(/|$) {
+        fastcgi_pass php-upstream;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param REQUEST_URI $request_url;
+        fastcgi_param SCRIPT_FILENAME $realpath_root/index.php;
+        fastcgi_param HTTPS off;
+    }
+
+    # serve assets
+    location ~* \.(css|js|png|gif|jpe?g|ttf|ico|svg|otf)$ {
+        expires 30d;
+        add_header Pragma public;
+        add_header Cache-Control "public";
+        access_log off;
+    }
+}

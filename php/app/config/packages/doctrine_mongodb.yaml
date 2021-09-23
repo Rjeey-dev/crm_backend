@@ -1,0 +1,43 @@
+doctrine_mongodb:
+    auto_generate_proxy_classes: true
+    auto_generate_hydrator_classes: true
+    connections:
+        default:
+            server: '%env(resolve:MONGODB_URL)%'
+
+    default_database: '%env(resolve:MONGODB_DB)%'
+    document_managers:
+        default:
+            auto_mapping: true
+            mappings:
+                comments:
+                    is_bundle: false
+                    type: annotation
+                    dir: '%kernel.project_dir%/src/Comments/Domain/Entity'
+                    prefix: App\Comments\Domain\Entity
+                comments_vo:
+                    type: annotation
+                    dir: "%kernel.project_dir%/src/Comments/Domain/ValueObject"
+                    prefix: App\Comments\Domain\ValueObject
+                    is_bundle: false
+                tasks:
+                    is_bundle: false
+                    type: annotation
+                    dir: '%kernel.project_dir%/src/Tasks/Domain/Entity'
+                    prefix: App\Tasks\Domain\Entity
+                tasks_vo:
+                    type: annotation
+                    dir: "%kernel.project_dir%/src/Tasks/Domain/ValueObject"
+                    prefix: App\Tasks\Domain\ValueObject
+                    is_bundle: false
+                users:
+                    is_bundle: false
+                    type: annotation
+                    dir: '%kernel.project_dir%/src/Users/Domain/Entity'
+                    prefix: App\Users\Domain\Entity
+                users_vo:
+                    type: annotation
+                    dir: "%kernel.project_dir%/src/Users/Domain/ValueObject"
+                    prefix: App\Users\Domain\ValueObject
+                    is_bundle: false
+

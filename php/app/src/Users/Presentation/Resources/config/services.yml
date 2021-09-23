@@ -1,0 +1,24 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    App\Users\Infrastructure\EventListener\AuthRequestEventListener:
+        tags: [{ name: kernel.event_listener, event: kernel.request }]
+
+    NinjaBuggs\ServiceBus\Query\QueryBusInterface: '@ninja_bugs.service_bus.query.bus'
+    NinjaBuggs\ServiceBus\Command\CommandBusInterface: '@ninja_bugs.service_bus.command.bus'
+    NinjaBuggs\ServiceBus\Event\EventBusInterface: '@ninja_bugs.service_bus.event.bus'
+
+    #App\Users\Infrastructure\Persistence\Doctrine\ORM\DataProvider\User: ~
+    App\Users\Infrastructure\Persistence\Doctrine\ODM\DataProvider\User: ~
+
+    #App\Users\Domain\DataProvider\UserInterface: '@App\Users\Infrastructure\Persistence\Doctrine\ORM\DataProvider\UserCache'
+    App\Users\Domain\DataProvider\UserInterface: '@App\Users\Infrastructure\Persistence\Doctrine\ODM\DataProvider\UserCache'
+
+    App\Users\Domain\Repository\UserRepositoryInterface: '@App\Users\Infrastructure\Persistence\Doctrine\ODM\Repository\User'
+
+    #App\Users\Infrastructure\Persistence\Doctrine\ORM\DataProvider\UserCache:
+    #  decorates: App\Users\Infrastructure\Persistence\Doctrine\ORM\DataProvider\User
+    #  arguments: ['@app.cache.data_providers', '@App\Users\Infrastructure\Persistence\Doctrine\ORM\DataProvider\UserCache.inner']

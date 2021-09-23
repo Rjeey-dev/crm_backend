@@ -1,0 +1,8 @@
+comments:
+    resource: '../src/Comments/Presentation/Resources/config/routes/annotations.yaml'
+
+task:
+    resource: '../src/Tasks/Presentation/Resources/config/routes/annotations.yaml'
+
+users:
+    resource: '../src/Users/Presentation/Resources/config/routes/annotations.yaml'
