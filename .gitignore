@@ -2,3 +2,4 @@
 mongodb/data
 nginx/logs
 php/logs
+redis/data
