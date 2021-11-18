@@ -16,6 +16,7 @@ RUN set -xe \
         zlib-dev \
         cyrus-sasl-dev \
         openjdk7-jre \
+        supervisor \
     && export CFLAGS="$PHP_CFLAGS" CPPFLAGS="$PHP_CPPFLAGS" LDFLAGS="$PHP_LDFLAGS" \
     && docker-php-ext-install \
         intl \
@@ -34,12 +35,15 @@ RUN set -xe \
     && apk del ${PHPIZE_DEPS} \
     && rm -rf /tmp/*
 
-# configure timezone
-ARG TZ=America/New_York
+COPY ./php/php.ini ${PHP_INI_DIR}/conf.d/
+COPY ./php/supervisor/* /etc/supervisor/conf.d/
+COPY ./php/supervisord.conf /etc/supervisor
 
-RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime \
-    && echo "${TZ}" > /etc/timezone \
-    && echo "date.timezone=${TZ}" > "${PHP_INI_DIR}/conf.d/date_tz.ini"
+COPY ./php/crontab /etc/cron.d/crontab
+RUN chmod 0644 /etc/cron.d/crontab
+RUN crontab /etc/cron.d/crontab
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
 
 RUN echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \

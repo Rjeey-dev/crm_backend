@@ -1,0 +1,1 @@
+*/10 * * * * php /var/www/app/bin/console tasks:start_scheduled_tasks

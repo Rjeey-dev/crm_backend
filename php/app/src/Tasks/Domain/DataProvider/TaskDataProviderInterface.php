@@ -15,4 +15,5 @@ interface TaskDataProviderInterface
      */
     public function findTask(TaskId $id): Task;
     public function findTasks(int $offset, int $limit, string $order): TasksList;
+    public function findScheduledTasks(): array;
 }

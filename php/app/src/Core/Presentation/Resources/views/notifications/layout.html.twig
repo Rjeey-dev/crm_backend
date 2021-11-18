@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{{ subject }}{% endblock %}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+        thead td img {
+            padding: 30px 0 0;
+        }
+        thead td h3 {
+            margin: 32px 15px 18px;
+        }
+        tbody p {
+            line-height: 20px;
+        }
+        tbody pre {
+            white-space: pre-wrap;
+        }
+        tbody td p,
+        tbody pre {
+            margin: 14px 15px;
+        }
+        tfoot td p {
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+        tfoot td hr {
+            margin-top: 26px;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+        p, pre {
+            color: #323232 !important;
+        }
+
+        @media screen and (min-width: 800px) {
+            thead td img {
+                padding: 45px 0 0;
+            }
+            thead td h3 {
+                margin: 30px 0 25px;
+            }
+            tbody td p,
+            tbody pre {
+                margin: 14px 50px;
+            }
+            tfoot td p {
+                margin-left: 50px;
+                margin-right: 50px;
+                margin-bottom: 40px;
+            }
+            tfoot td hr {
+                margin-left: 45px;
+                margin-right: 45px;
+            }
+            td.container {
+                padding: 30px;
+                background-color: #f4f4f4;
+            }
+        }
+    </style>
+</head>
+<body style="font-family: Roboto, sans-serif; font-size: 14px;">
+<table id="container" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td class="container">
+            <table style="max-width: 700px; margin: 0 auto; background-color: #ffffff;" border="0" cellspacing="0" cellpadding="0">
+                <thead>
+                <tr>
+                    <td style="text-align: center;">
+                        {#<img style="width: 170px; height: 29px; " src="{{ absolute_url('/img/mail/logo.png') }}" alt="">#}
+                        <h3 style="font-size: 24px; color: #05cfff;padding: 0 20px;">{% block header %}{{ subject }}{% endblock %}</h3>
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td style="color: #323232 !important;">
+                        {% block content %}{% endblock %}
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td style="font-size: 12px; color: #8f8f8f;">
+                        <hr style="margin-bottom: 12px; border-bottom: 0; border-color: #e0e0e0; border-style: solid;">
+                        <p style="color: #919191;">
+                            {% block footer %}{% endblock %}
+                        </p>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

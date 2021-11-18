@@ -1,0 +1,7 @@
+notification:
+  mail:
+    subjects:
+      new_task_created: 'New task has been created for you'
+      task_has_been_started: 'Task has been started'
+      task_has_been_completed: 'Task has been completed'
+      task_has_been_deleted: 'Task has been deleted'

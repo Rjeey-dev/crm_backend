@@ -1,0 +1,11 @@
+{% extends '@core/notifications/layout.html.twig' %}
+
+{% block content %}
+    <p>
+        New task <b>{{ parameters.name }}</b> has been created for you.
+    </p>
+{% endblock %}
+
+{% block footer %}
+    Please do not reply to this email.<br>
+{% endblock %}

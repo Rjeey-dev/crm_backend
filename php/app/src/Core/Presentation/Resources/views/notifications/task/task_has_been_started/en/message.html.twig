@@ -1,0 +1,11 @@
+{% extends '@core/notifications/layout.html.twig' %}
+
+{% block content %}
+    <p>
+        Task <b>{{ parameters.name }}</b> has been started by <b>{{ parameters.recipient_name }}</b>.
+    </p>
+{% endblock %}
+
+{% block footer %}
+    Please do not reply to this email.<br>
+{% endblock %}

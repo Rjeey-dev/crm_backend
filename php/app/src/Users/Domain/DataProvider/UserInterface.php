@@ -16,4 +16,6 @@ interface UserInterface
     public function getUser(UserId $id, ?UserId $currentUserId = null): User;
 
     public function userExistsByLogin(UserLogin $login): bool;
+
+    public function getUsers(): array;
 }

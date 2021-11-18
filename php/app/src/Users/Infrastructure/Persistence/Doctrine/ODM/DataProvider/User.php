@@ -28,7 +28,7 @@ class User extends DocumentRepository implements UserInterface
             throw new UserNotFoundException(sprintf('User %s not found', $id->getId()));
         }
 
-        return $this->createUser($user, $currentUserId);
+        return $this->createUser($user);
     }
 
     public function userExistsByLogin(UserLogin $login): bool
@@ -42,19 +42,26 @@ class User extends DocumentRepository implements UserInterface
         return $query->getSingleResult() !== null;
     }
 
-    private function createUser(array $user, ?UserId $currentUserId = null): UserDTO
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsers(): array
     {
-        $settings = null;
-        $email = null;
+        $users = [];
 
-        if ($currentUserId && $currentUserId->isEqual($user['_id'])) {
-            $settings = new Settings($user['settings']['lang'], (bool)$user['settings']['email_notifications']);
+        $query = $this->getDocumentManager()->createQueryBuilder(UserEntity::class);
+        $query = $query->hydrate(false)
+            ->getQuery();
 
-            $email = array_key_exists('email', $user) ? $user['email'] : null;
+        foreach ($query->execute() as $user) {
+            $users[] = $this->createUser($user);
         }
 
-        $role = new RoleVO($user['role']['name']);
+        return $users;
+    }
 
+    private function createUser(array $user): UserDTO
+    {
         return new UserDTO(
             $user['_id'],
             $user['name'],
@@ -63,8 +70,8 @@ class User extends DocumentRepository implements UserInterface
                 $user['role']['name'],
                 \DateTimeImmutable::createFromMutable($user['role']['updated']->toDateTime())
             ),
-            $settings,
-            $email,
+            new Settings($user['settings']['lang'], (bool)$user['settings']['email_notifications']),
+            $user['email'],
             array_key_exists('image', $user) ? $user['image'] : null,
             \DateTimeImmutable::createFromMutable($user['created']->toDateTime())
         );

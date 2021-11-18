@@ -7,6 +7,7 @@ use App\Tasks\Domain\Event\TaskHasBeenCreatedEvent;
 use App\Tasks\Domain\Event\TaskHasBeenUpdateEvent;
 use App\Tasks\Domain\Event\TaskHasBeenDeletedEvent;
 use App\Tasks\Domain\ValueObject\TaskId;
+use App\Tasks\Domain\ValueObject\User;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use NinjaBuggs\ServiceBus\Event\EventRecordableInterface;
 use NinjaBuggs\ServiceBus\Event\EventRecordableTrait;
@@ -18,9 +19,9 @@ class Task implements EventRecordableInterface
 {
     use EventRecordableTrait;
 
-    private const STATUS_TODO = 0;
-    private const STATUS_DOING = 1;
-    private const STATUS_DONE = 2;
+    public const STATUS_TODO = 0;
+    public const STATUS_DOING = 1;
+    public const STATUS_DONE = 2;
 
     /**
      * @MongoDB\Id(strategy="NONE", type="task:task_id")
@@ -28,32 +29,54 @@ class Task implements EventRecordableInterface
     private $id;
 
     /**
-     * @MongoDB\Field(name="name", type="string")
+     * @MongoDB\Field(type="string")
      */
     private $name;
 
     /**
-     * @MongoDB\Field(name="status", type="int")
+     * @MongoDB\Field(type="int")
      */
     private $status = self::STATUS_TODO;
 
+    /** @MongoDB\EmbedOne(targetDocument="\App\Tasks\Domain\ValueObject\User") */
+    private $recipient;
+
+    /** @MongoDB\EmbedOne(targetDocument="\App\Tasks\Domain\ValueObject\User") */
+    private $owner;
+
+    /**
+     * @MongoDB\Field(name="start_date", type="date_immutable")
+     */
+    private $startDate;
 
     /**
      * @MongoDB\Field(type="date_immutable")
      */
     private $created;
 
-    public function __construct(TaskId $id, string $name)
-    {
+    public function __construct(
+        TaskId $id,
+        string $name,
+        User $recipient,
+        User $owner,
+        \DateTimeImmutable $startDate
+    ) {
         $this->id = $id;
         $this->name = $name;
+        $this->recipient = $recipient;
+        $this->owner = $owner;
+        $this->startDate = $startDate;
 
         $this->created = new \DateTimeImmutable();
 
         $this->recordEvent(new TaskHasBeenCreatedEvent(
             $id->getId(),
             $name,
-            $this->status
+            $recipient->getId(),
+            $owner->getId(),
+            $startDate,
+            $this->status,
+            $this->created
         ));
     }
 
@@ -69,7 +92,12 @@ class Task implements EventRecordableInterface
         $this->recordEvent(new TaskHasBeenUpdateEvent(
             $this->id->getId(),
             $this->name,
-            $this->status
+            $this->status,
+            $this->recipient->getId(),
+            $this->recipient->getName(),
+            $this->owner->getId(),
+            $this->status === self::STATUS_DOING,
+            $this->status === self::STATUS_DONE
         ));
     }
 
@@ -78,7 +106,30 @@ class Task implements EventRecordableInterface
         $this->recordEvent(new TaskHasBeenDeletedEvent(
             $this->id->getId(),
             $this->name,
-            $this->status
+            $this->status,
+            $this->recipient->getId(),
+            $this->owner->getId(),
+            $this->owner->getName()
+        ));
+    }
+
+    public function start(): void
+    {
+        if ($this->status !== self::STATUS_TODO) {
+            throw new \LogicException();
+        }
+
+        $this->status = self::STATUS_DOING;
+
+        $this->recordEvent(new TaskHasBeenUpdateEvent(
+            $this->id->getId(),
+            $this->name,
+            $this->status,
+            $this->recipient->getId(),
+            $this->recipient->getName(),
+            $this->owner->getId(),
+            true,
+            false
         ));
     }
 }

@@ -28,6 +28,36 @@ class Task
     public $name;
 
     /**
+     * @Serializer\SerializedName("recipient")
+     * @Serializer\Type("App\Tasks\Domain\DTO\User")
+     * @Serializer\Groups({
+     *     "tasks-list",
+     *     "task-detail",
+     * })
+     */
+    public $recipient;
+
+    /**
+     * @Serializer\SerializedName("owner")
+     * @Serializer\Type("App\Tasks\Domain\DTO\User")
+     * @Serializer\Groups({
+     *     "tasks-list",
+     *     "task-detail",
+     * })
+     */
+    public $owner;
+
+    /**
+     * @Serializer\SerializedName("start_date")
+     * @Serializer\Type("DateTimeImmutable")
+     * @Serializer\Groups({
+     *     "tasks-list",
+     *     "task-detail",
+     * })
+     */
+    public $startDate;
+
+    /**
      * @Serializer\SerializedName("status")
      * @Serializer\Type("int")
      * @Serializer\Groups({
@@ -47,10 +77,20 @@ class Task
      */
     public $created;
 
-    public function __construct(string $id, string $name, int $status, \DateTimeImmutable $created)
-    {
+    public function __construct(
+        string $id,
+        string $name,
+        User $recipient,
+        User $owner,
+        \DateTimeImmutable $startDate,
+        int $status,
+        \DateTimeImmutable $created
+    ) {
         $this->id = $id;
         $this->name = $name;
+        $this->recipient = $recipient;
+        $this->owner = $owner;
+        $this->startDate = $startDate;
         $this->status = $status;
         $this->created = $created;
     }

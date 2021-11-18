@@ -12,6 +12,7 @@ use App\Tasks\Application\Query\FindTaskByIdQuery;
 use App\Tasks\Application\Query\FindTasksQuery;
 use App\Tasks\Domain\DTO\TasksList;
 use App\Tasks\Domain\Exception\ValidationException;
+use Cassandra\Date;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -53,7 +54,9 @@ class TaskController extends ApiController
             $data = json_decode($request->getContent(), true);
 
             $command = new CreateTaskCommand(
-                (string)$data['name']
+                (string)$data['name'],
+                (string)$data['recipient'],
+                (new \DateTimeImmutable())->setTimestamp((int)$data['start_date']),
             );
 
             $this->commandBus->handle($command);

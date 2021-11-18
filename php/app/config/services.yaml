@@ -21,6 +21,7 @@ services:
         bind:
             string $secret: '%env(MERCURE_JWT_SECRET)%'
             string $webSocketUrl: '%env(WEB_SOCKET_URL)%'
+            string $serviceEmail: '%env(SERVICE_EMAIL)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -49,7 +50,8 @@ services:
             - '../src/Users/Domain/ValueObject'
             - '../src/Users/Infrastructure/Services/Auth/DTO'
             - '../src/Users/Infrastructure/Services/Identity'
-
+            - '../src/Core/Application/Command'
+            - '../src/Core/Domain/ValueObject'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
