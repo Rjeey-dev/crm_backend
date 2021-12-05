@@ -5,3 +5,4 @@ notification:
       task_has_been_started: 'Task has been started'
       task_has_been_completed: 'Task has been completed'
       task_has_been_deleted: 'Task has been deleted'
+      task_has_been_updated: 'Task has been updated'

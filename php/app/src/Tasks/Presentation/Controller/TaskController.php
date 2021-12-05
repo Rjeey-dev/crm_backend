@@ -55,6 +55,7 @@ class TaskController extends ApiController
 
             $command = new CreateTaskCommand(
                 (string)$data['name'],
+                (string)$data['text'],
                 (string)$data['recipient'],
                 (new \DateTimeImmutable())->setTimestamp((int)$data['start_date']),
             );
@@ -99,6 +100,7 @@ class TaskController extends ApiController
             $command = new UpdateTaskCommand(
                 $id,
                 array_key_exists('name', $data) ? (string) $data['name'] : null,
+                array_key_exists('text', $data) ? (string) $data['text'] : null,
                 array_key_exists('status', $data) ? (int) $data['status'] : null
             );
 

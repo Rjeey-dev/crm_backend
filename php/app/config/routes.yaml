@@ -6,3 +6,6 @@ task:
 
 users:
     resource: '../src/Users/Presentation/Resources/config/routes/annotations.yaml'
+
+statistics:
+    resource: '../src/Statistics/Presentation/Resources/config/routes/annotations.yaml'

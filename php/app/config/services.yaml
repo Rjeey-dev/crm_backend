@@ -52,6 +52,8 @@ services:
             - '../src/Users/Infrastructure/Services/Identity'
             - '../src/Core/Application/Command'
             - '../src/Core/Domain/ValueObject'
+            - '../src/Statistics/Application/Query'
+            - '../src/Statistics/Domain/DTO'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

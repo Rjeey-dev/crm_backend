@@ -11,6 +11,7 @@ class SendEmail implements CommandInterface
     public const SUBJECT_TASK_HAS_BEEN_STARTED = 'task_has_been_started';
     public const SUBJECT_TASK_HAS_BEEN_COMPLETED = 'task_has_been_completed';
     public const SUBJECT_TASK_HAS_BEEN_DELETED = 'task_has_been_deleted';
+    public const SUBJECT_TASK_HAS_BEEN_UPDATED = 'task_has_been_updated';
 
     public const FORMAT_TEXT = 'txt';
     public const FORMAT_HTML = 'html';
@@ -21,6 +22,7 @@ class SendEmail implements CommandInterface
     public const TYPE_TASK_HAS_BEEN_STARTED = 'task_has_been_started';
     public const TYPE_TASK_HAS_BEEN_COMPLETED = 'task_has_been_completed';
     public const TYPE_TASK_HAS_BEEN_DELETED = 'task_has_been_deleted';
+    public const TYPE_TASK_HAS_BEEN_UPDATED = 'task_has_been_updated';
 
     private const supportedFormats = [
         self::FORMAT_TEXT,

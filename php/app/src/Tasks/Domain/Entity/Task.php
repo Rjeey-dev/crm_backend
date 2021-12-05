@@ -34,6 +34,11 @@ class Task implements EventRecordableInterface
     private $name;
 
     /**
+     * @MongoDB\Field(type="string")
+     */
+    private $text;
+
+    /**
      * @MongoDB\Field(type="int")
      */
     private $status = self::STATUS_TODO;
@@ -57,6 +62,7 @@ class Task implements EventRecordableInterface
     public function __construct(
         TaskId $id,
         string $name,
+        string $text,
         User $recipient,
         User $owner,
         \DateTimeImmutable $startDate
@@ -66,6 +72,7 @@ class Task implements EventRecordableInterface
         $this->recipient = $recipient;
         $this->owner = $owner;
         $this->startDate = $startDate;
+        $this->text = $text;
 
         $this->created = new \DateTimeImmutable();
 
@@ -80,24 +87,28 @@ class Task implements EventRecordableInterface
         ));
     }
 
-    public function update(?string $name, ?int $status): void
+    public function update(?string $name, ?string $text, ?int $status): void
     {
-        if (!$name && !$status) {
+        if (!$name && !$text && !$status) {
             return;
         }
 
+        $idEdit = $name !== $this->name || $text !== $this->text;
         $this->name = $name ?? $this->name;
+        $this->text = $text ?? $this->text;
         $this->status = $status ?? $this->status;
 
         $this->recordEvent(new TaskHasBeenUpdateEvent(
             $this->id->getId(),
             $this->name,
+            $this->text,
             $this->status,
             $this->recipient->getId(),
             $this->recipient->getName(),
             $this->owner->getId(),
-            $this->status === self::STATUS_DOING,
-            $this->status === self::STATUS_DONE
+            ($this->status === self::STATUS_DOING && $status !== $this->status),
+            ($this->status === self::STATUS_DONE && $status !== $this->status),
+            $idEdit
         ));
     }
 

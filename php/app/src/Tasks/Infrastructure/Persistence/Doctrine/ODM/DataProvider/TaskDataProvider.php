@@ -70,6 +70,7 @@ class TaskDataProvider extends DocumentRepository implements TaskDataProviderInt
         return new Task(
             $task['_id'],
             $task['name'],
+            $task['text'],
             new User(
                 $task['recipient']['id'],
                 $task['recipient']['login'],

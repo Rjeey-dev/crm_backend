@@ -35,6 +35,7 @@ class CreateTaskCommandHandler implements UseCaseInterface, TransactionalHandler
         $task = new Task(
             $command->getId(),
             $command->getName(),
+            $command->getText(),
             new User(
                 $recipient->getId(),
                 $recipient->getLogin(),

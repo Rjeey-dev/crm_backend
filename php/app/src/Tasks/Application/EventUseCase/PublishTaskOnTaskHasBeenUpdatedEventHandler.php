@@ -33,10 +33,10 @@ class PublishTaskOnTaskHasBeenUpdatedEventHandler implements EventUseCaseInterfa
             $task
         ));
 
-        $this->commandBus->handle(new CreatePushNotificationCommand(
+        /*$this->commandBus->handle(new CreatePushNotificationCommand(
             $event->getOwner(),
             CreatePushNotificationCommand::TYPE_TASK_UPDATED,
             $task
-        ));
+        ));*/
     }
 }

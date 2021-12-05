@@ -10,13 +10,15 @@ class CreateTaskCommand implements CommandInterface
 {
     private $id;
     private $name;
+    private $text;
     private $recipient;
     private $startDate;
 
-    public function __construct(string $name, string $recipient, \DateTimeImmutable $startDate)
+    public function __construct(string $name, string $text, string $recipient, \DateTimeImmutable $startDate)
     {
         $this->id = TaskId::generate();
         $this->name= $name;
+        $this->text = $text;
         $this->recipient = $recipient;
         $this->startDate = $startDate;
     }
@@ -39,5 +41,10 @@ class CreateTaskCommand implements CommandInterface
     public function getStartDate(): \DateTimeImmutable
     {
         return $this->startDate;
+    }
+
+    public function getText(): string
+    {
+        return $this->text;
     }
 }
