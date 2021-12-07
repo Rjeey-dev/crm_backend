@@ -35,7 +35,7 @@ class SendEmailToTaskOwnerIfTaskCompletedOnTaskHasBeenUpdatedEventHandler implem
             }
 
             /** @var User $user */
-            $user = $this->queryBus->handle(new GetUserQuery($event->getRecipient()));
+            $user = $this->queryBus->handle(new GetUserQuery($event->getOwner()));
 
             $this->commandBus->handle(new SendEmail(
                 'en',

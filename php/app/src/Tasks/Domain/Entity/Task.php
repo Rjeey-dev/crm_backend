@@ -93,7 +93,8 @@ class Task implements EventRecordableInterface
             return;
         }
 
-        $idEdit = $name !== $this->name || $text !== $this->text;
+        $hasStatusChanged = $status !== $this->status;
+        $idEdit = ($name && $name !== $this->name) || ($text && $text !== $this->text);
         $this->name = $name ?? $this->name;
         $this->text = $text ?? $this->text;
         $this->status = $status ?? $this->status;
@@ -106,8 +107,8 @@ class Task implements EventRecordableInterface
             $this->recipient->getId(),
             $this->recipient->getName(),
             $this->owner->getId(),
-            ($this->status === self::STATUS_DOING && $status !== $this->status),
-            ($this->status === self::STATUS_DONE && $status !== $this->status),
+            ($this->status === self::STATUS_DOING && $hasStatusChanged),
+            ($this->status === self::STATUS_DONE && $hasStatusChanged),
             $idEdit
         ));
     }
@@ -135,11 +136,13 @@ class Task implements EventRecordableInterface
         $this->recordEvent(new TaskHasBeenUpdateEvent(
             $this->id->getId(),
             $this->name,
+            $this->text,
             $this->status,
             $this->recipient->getId(),
             $this->recipient->getName(),
             $this->owner->getId(),
             true,
+            false,
             false
         ));
     }
